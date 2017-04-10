@@ -273,31 +273,32 @@ func (s *Server) handleRefreshTokenRequest(ctx context.Context, r *http.Request,
 		return nil, NewError(EInvalidGrant, "no refresh token provided")
 	}
 
-	// must be a valid refresh code
-	previousRefreshToken, err := s.Storage.GetRefreshTokenData(ctx, req.RefreshToken)
-	if err != nil {
-		return nil, NewWrappedError(EInvalidGrant, err, "failed to get refresh token data from storage")
-	}
-
-	// client must be the same as the previous token
-	if previousRefreshToken.ClientID != req.ClientID {
-		return nil, NewError(EInvalidClient, "request client id must be the same from previous token")
-	}
-
-	if previousRefreshToken.RedirectURI != req.RedirectURI {
-		return nil, NewError(EInvalidGrant, "request redirect uri must be the same as the one used to issue the refresh token")
-	}
-
-	// set rest of data
-	req.UserData = previousRefreshToken.UserData
-	if req.Scope == "" {
-		req.Scope = previousRefreshToken.Scope
-	}
-
-	req.Scope, err = s.AccessTokenSubScoper.CheckSubScopes(req.Scope, previousRefreshToken.Scope)
-	if err != nil {
-		return nil, NewError(EInvalidScope, "the requested scope must not include any scope not originally granted by the resource owner")
-	}
+	// TODO(bplotka):
+	//// must be a valid refresh code
+	//previousRefreshToken, err := s.Storage.GetRefreshTokenData(ctx, req.RefreshToken)
+	//if err != nil {
+	//	return nil, NewWrappedError(EInvalidGrant, err, "failed to get refresh token data from storage")
+	//}
+	//
+	//// client must be the same as the previous token
+	//if previousRefreshToken.ClientID != req.ClientID {
+	//	return nil, NewError(EInvalidClient, "request client id must be the same from previous token")
+	//}
+	//
+	//if previousRefreshToken.RedirectURI != req.RedirectURI {
+	//	return nil, NewError(EInvalidGrant, "request redirect uri must be the same as the one used to issue the refresh token")
+	//}
+	//
+	//// set rest of data
+	//req.UserData = previousRefreshToken.UserData
+	//if req.Scope == "" {
+	//	req.Scope = previousRefreshToken.Scope
+	//}
+	//
+	//req.Scope, err = s.AccessTokenSubScoper.CheckSubScopes(req.Scope, previousRefreshToken.Scope)
+	//if err != nil {
+	//	return nil, NewError(EInvalidScope, "the requested scope must not include any scope not originally granted by the resource owner")
+	//}
 
 	return req, nil
 }
