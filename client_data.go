@@ -21,7 +21,7 @@ func (c *ClientData) ValidSecret(secret string) bool {
 func getClientDataAndValidate(ctx context.Context, auth *BasicAuth, storage Storage) (*ClientData, error) {
 	clientData, err := getClientData(ctx, auth.Username, storage)
 	if err != nil {
-		return nil, NewError(EUnauthorizedClient, "client not found")
+		return nil, err
 	}
 
 	if !clientData.ValidSecret(auth.Password) {
