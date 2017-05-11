@@ -1,9 +1,6 @@
 package niso
 
-import (
-	"errors"
-	"net/http"
-)
+import "net/http"
 
 // BasicAuth is the parsed basic authentication header
 type BasicAuth struct {
