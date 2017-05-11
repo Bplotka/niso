@@ -21,7 +21,7 @@ func getClientAuthFromRequest(r *http.Request, allowQueryParams bool) (*BasicAut
 			user = r.FormValue("client_id")
 			pass = r.FormValue("client_secret")
 		} else {
-			return nil, errors.New("invalid authorization header")
+			return nil, NewError(EInvalidRequest, "invalid or none authorization header")
 		}
 	}
 
